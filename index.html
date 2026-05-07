@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Duplo Train Controller</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #1a1a2e; color: #e0e0e0;
+      padding: 24px; max-width: 640px; margin: 0 auto;
+    }
+    h1 { font-size: 1.4rem; margin-bottom: 20px; color: #fff; }
+    h2 { font-size: 1rem; margin-bottom: 8px; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .connections { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .conn-row { display: flex; align-items: center; gap: 12px; }
+    .conn-row button {
+      background: #2d2d5e; color: #fff; border: 1px solid #444;
+      padding: 8px 16px; border-radius: 6px; cursor: pointer; min-width: 160px;
+      font-size: 0.9rem;
+    }
+    .conn-row button:hover { background: #3d3d7e; }
+    .conn-row span { font-size: 0.85rem; color: #888; }
+
+    .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .train-card {
+      background: #16213e; border: 1px solid #333; border-radius: 8px; padding: 16px;
+    }
+    .train-card.active { border-color: #4fc3f7; }
+    .train-card h3 { font-size: 0.9rem; margin-bottom: 12px; }
+    .train-card .label { font-size: 0.75rem; color: #888; text-transform: uppercase; }
+    .train-card .value { font-size: 1.8rem; font-weight: bold; font-variant-numeric: tabular-nums; }
+
+    .stat { margin-bottom: 8px; }
+    .active-badge {
+      display: inline-block; font-size: 0.65rem; background: #4fc3f7; color: #000;
+      padding: 2px 6px; border-radius: 3px; margin-left: 6px; vertical-align: middle;
+    }
+
+    .controls { margin-bottom: 24px; }
+    .controls table { width: 100%; border-collapse: collapse; }
+    .controls td { padding: 4px 8px; font-size: 0.85rem; border-bottom: 1px solid #222; }
+    .controls td:first-child { color: #aaa; width: 40%; white-space: nowrap; }
+    .controls td:last-child { color: #ccc; }
+
+    #console {
+      background: #0f0f23; border: 1px solid #333; border-radius: 6px;
+      padding: 12px; font-family: monospace; font-size: 0.8rem;
+      height: 180px; overflow-y: auto; color: #6a6a8a;
+    }
+  </style>
+</head>
+<body>
+  <h1>Duplo Train Controller</h1>
+
+  <h2>Connect</h2>
+  <div class="connections">
+    <div class="conn-row">
+      <button onclick="Duplo.connectTrain(0)">Connect Train 1</button>
+      <span id="train1-status">—</span>
+    </div>
+    <div class="conn-row">
+      <button onclick="Duplo.connectTrain(1)">Connect Train 2</button>
+      <span id="train2-status">—</span>
+    </div>
+    <div class="conn-row">
+      <button onclick="Duplo.connectController()">Connect Controller</button>
+      <span id="controller-status">—</span>
+    </div>
+  </div>
+
+  <h2>Dashboard</h2>
+  <div class="dashboard">
+    <div class="train-card" id="train1-card">
+      <h3>Train 1 <span class="active-badge" id="train1-badge" style="display:none">ACTIVE</span></h3>
+      <div class="stat">
+        <div class="label">Cruise</div>
+        <div class="value" id="train1-cruise">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Power</div>
+        <div class="value" id="train1-power">0</div>
+      </div>
+    </div>
+    <div class="train-card" id="train2-card">
+      <h3>Train 2 <span class="active-badge" id="train2-badge" style="display:none">ACTIVE</span></h3>
+      <div class="stat">
+        <div class="label">Cruise</div>
+        <div class="value" id="train2-cruise">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Power</div>
+        <div class="value" id="train2-power">0</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Controls</h2>
+  <div class="controls">
+    <table>
+      <tr><td>D-Pad Up / Down</td><td>Set cruise speed (-5 to +5)</td></tr>
+      <tr><td>Right Stick</td><td>Manual throttle / brake (overrides cruise)</td></tr>
+      <tr><td>L1 / R1</td><td>Switch to Train 1 / Train 2</td></tr>
+      <tr><td>Cross</td><td>Emergency stop + brake sound</td></tr>
+      <tr><td>Circle</td><td>Steam sound</td></tr>
+      <tr><td>Square</td><td>Horn sound</td></tr>
+      <tr><td>Triangle</td><td>Station sound</td></tr>
+    </table>
+  </div>
+
+  <h2>Log</h2>
+  <div id="console"></div>
+
+  <script src="bundle.js"></script>
+  <script>Duplo.init();</script>
+</body>
+</html>
